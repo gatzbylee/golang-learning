@@ -23,3 +23,5 @@ go build 对该文件编译
 运行成功后会出现一个hello.exe文件，可在cmd下直接hello执行文件（编译好了）
 
 也可以直接go run hello.go执行，但速度较慢
+
+建立新的名字 go build -o myhello.exe hello.go \\根据hello.go文件新建myhello.exe文件
