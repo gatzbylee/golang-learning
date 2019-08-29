@@ -1,0 +1,14 @@
+/r 是同行内换行并相应覆盖前面的内容   "的点点滴滴/r等等" 输出为"等等点滴滴"
+
+选中若干行然后shift+tab是向左对其，shift向右对齐
+
+可以在dos中gofmt -w hello.go 来直接格式化对齐代码
+
+一行过长可以 fmt.Println("sadfsdfsadf",
+                "dsafdsafsadf",
+                "sdfsdfsafsafd")
+                
+cd \ 回到根目录
+md abc 新建目录
+rd abc 删除空目录
+rd /q/s abc   /q不用询问 /s删除该目录下的所有文件
