@@ -12,3 +12,6 @@ cd \ 回到根目录
 md abc 新建目录
 rd abc 删除空目录
 rd /q/s abc   /q不用询问 /s删除该目录下的所有文件
+move abc.txt f:\
+del abc.txt f:\
+cls  清屏
