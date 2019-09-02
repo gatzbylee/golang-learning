@@ -32,3 +32,14 @@ var i int = 10
 变量名，函数名，常量名首字母为大写是共有的，首字母小写是私有的！
 
 i++ i-- 只能单独使用，防止像c++里那样的复杂
+
+&&又叫短路与，因为a&&b 当a为false时后面b就不进行判断了，直接输出false
+||又叫短路或，一样的，当a为true时b就不进行判断了，直接输出true
+func test() bool{                //函数也可以这么用！
+	fmt.Printf("testing...")
+	return true
+}
+var i int = 10
+if i>9 && test() {                          //当i>9为false时就会什么都不输出
+		fmt.Printf("everythingsok")
+	}
