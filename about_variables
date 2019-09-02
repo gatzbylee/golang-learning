@@ -1,5 +1,5 @@
 数据类型转换可以大小互相转，大的变小的并不会报错，只是会溢出处理
 
-基本数据类型转string   var i int =230; var str string; str = fmt.Printf("%d", i)  //Printf输出为格式化字符串，所以可以直接赋值
+基本数据类型转string   var i int =230; var str string; str = fmt.Sprintf("%d", i)  //Printf输出为格式化字符串，所以可以直接赋值
 
 Printf里 %t用于bool， %v是默认输出格式， %q用“”括起来
