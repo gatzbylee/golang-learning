@@ -15,3 +15,7 @@ rd /q/s abc   /q不用询问 /s删除该目录下的所有文件
 move abc.txt f:\
 del abc.txt f:\
 cls  清屏
+
+if age := 20; age > 18{                  //if支持直接在里面定义变量再判断
+		Printf("yes")
+	}
