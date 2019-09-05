@@ -19,3 +19,25 @@ cls  清屏
 if age := 20; age > 18{                  //if支持直接在里面定义变量再判断
 		Printf("yes")
 	}
+
+count := 0
+	for {
+		rand.Seed(time.Now().UnixNano())
+		n := rand.Intn(100) + 1
+		count++
+		fmt.Println("n=", n)
+		
+		if n == 90{
+			fmt.Println("count is ", count)
+			break
+		}
+	}
+// rand.Seed(time.Now().Unix())  返回从1970年1月1日零时至现在的秒数,但是秒对于机器循环太长了，换成纳秒更好
+	// 随机需要先设置一个种子，如果不设置，下面的随机语句总是会输出一个固定的值，而不是随机的了
+	
+break 后加标签可以跳到指定的地方
+...
+lable
+...
+...
+break lable
