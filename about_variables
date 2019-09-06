@@ -43,3 +43,38 @@ var i int = 10
 if i>9 && test() {                          //当i>9为false时就会什么都不输出
 		fmt.Printf("everythingsok")
 	}
+
+数组在go里在函数中是值传递的，和基本数据类型一样。不同于其他语言
+go不支持重载，func test(x int, y int){...}  func test(x int){...}   ×
+
+func sum(n1 int, n2 int) int{
+	return n1 + n2
+}
+
+type myfun func(int, int) int   //支持数据类型自定义，但注意！不能放在main函数内部，因为区域不同，无法识别
+
+func fun2(funvar myfun, num1 int, num2 int) int{   //myfun直接代替了 func(int, int) int
+	return funvar(num1, num2)
+}
+
+func fun(funvar func(int, int) int, num1 int ,num2 int) int{  //函数也可作为形参，注意格式！
+	return funvar(num1, num2)
+}
+
+func main(){
+	a := sum            //函数也看做一种数据类型，可以如此的传给变量
+	fmt.Printf("a type -> %T,sum type -> %T\n", a, sum)  //a type -> func(int, int) int,sum type -> func(int, int) int
+	res := a(10, 20)
+	fmt.Println(res)  //30
+	res2 := fun(sum, 50, 60)
+	fmt.Println(res2)  // 110
+	res3 := fun2(sum, 70, 60)
+	fmt.Println(res3)  //130
+}
+
+函数返回可以直接设置
+func sum(n1 int, n2 int)(sum int, sub int){
+	sum = n1 + n2
+	sub = n1 - n2
+	return
+}
