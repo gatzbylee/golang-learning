@@ -52,3 +52,17 @@ import(
 同一包下不同文件里也不能有相同的函数名（只对于共享的变量和函数来说）
 
 库文件 utils.a 这样，就是把包转成2进制文件，可以使用，但看不了源码，属于一种隐私方法
+
+init函数会在main函数之前调用,而全局变量最先被初始化
+var f = test()
+func test() int{
+	fmt.Println("first!!!")
+	return 90
+}
+func init(){
+	fmt.Println("second!!!")
+}
+func main(){
+	fmt.Println("third!!! and f=", f)
+}
+当执行文件和引入文件里都有全局变量和init函数时：引入包全局变量-》引入包init函数-》执行文件全局变量-》执行文件init函数-》执行文件main函数
