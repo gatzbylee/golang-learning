@@ -72,9 +72,35 @@ func main(){
 	fmt.Println(res3)  //130
 }
 
-函数返回可以直接设置
+函数返回可以直接设置，但要用括号括起来！
 func sum(n1 int, n2 int)(sum int, sub int){
 	sum = n1 + n2
 	sub = n1 - n2
+	return              //返回sum和sub可加可不加
+}
+
+func sum(n1 int, args... int) (sum int) {      //n1为固定参数，也可没有固定的参数，这时这样写：func sum(args... int)
+	sum = n1
+	for i :=0; i < len(args); i++{
+		sum += args[i]
+	}
 	return
+}
+func main(){
+	res := sum(10)
+	fmt.Println(res)         //10
+	res = sum(10, 0, -1, 90)
+	fmt.Println(res)          //99
+}
+
+func swap(n1 *int, n2 *int){              //注意指针和地址在函数中的用法！
+	t := *n1
+	*n1 = *n2
+	*n2 = t 
+}
+func main(){
+	n1 := 3
+	n2 := 5
+	swap(&n1, &n2)
+	fmt.Println(n1, n2)
 }
