@@ -1,0 +1,20 @@
+package main
+import(
+	"fmt"
+)
+
+func test(n1 int, n2 int) int {
+	defer fmt.Println("n1 is ", n1)      //No.3  使用defer时会将语句放入栈中，待函数执行完后按先进后出的顺序执行。
+	defer fmt.Println("n2 is ", n2)      //No.2
+	n1++                                  //由于前面defer已经将语句放入栈中，输出时并不改变值，仍为10和20，而不是11和21
+	n2++
+	res := n1 + n2
+	fmt.Println("res is", res)   //No.1
+	return res
+}
+
+func main(){
+	f := test(10, 20)
+	fmt.Println("f is", f)   //No.4
+}
+//defer在打开文件或是数据库后关闭会很有用，这样就不用考虑何时何地关闭了，因为最后defer总会把它关了
