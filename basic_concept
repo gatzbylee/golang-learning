@@ -66,3 +66,4 @@ func main(){
 	fmt.Println("third!!! and f=", f)
 }
 当执行文件和引入文件里都有全局变量和init函数时：引入包全局变量-》引入包init函数-》执行文件全局变量-》执行文件init函数-》执行文件main函数
+ 
