@@ -1,0 +1,9 @@
+package main
+import(
+	"fmt"
+)
+
+func main(){
+	num := new(int)   //new新分配一个内存空间，返回一个指针
+	fmt.Printf("num type is %T, num is %v, num address is %v, num point %v", num, num, &num, *num)
+}
