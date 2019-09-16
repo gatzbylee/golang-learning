@@ -1,0 +1,45 @@
+package main
+import(
+	"fmt"
+	_ "time"  //这种写法注销引入的time包，在go中不使用time包也不会报错了
+	"errors"
+)
+
+func readConf(str string) error{        //自定义错误，返回一个error类型
+	if str == "config.ini"{
+		return nil
+	} else{
+		return errors.New("reading file error.")
+	}
+}
+
+func test2(){
+	err := readConf("config2.ini")
+	if err != nil{
+		panic(err)           //panic会在发出err时终止程序
+	}
+}
+
+func test(){
+	defer func (){                //defer 用来处理错误，并不会终止程序
+		err := recover()          //recover用来捕获错误信息
+		fmt.Printf("err type is:%T\n", err)   //在被recover赋值时此类型就已经被确定
+		if err != nil{
+			fmt.Println("err happened:", err)
+			fmt.Println("send error to the adminstrater")
+		}
+		fmt.Printf("err type is:%T\n", err)
+	}()              //匿名函数的调用要在最后加括号，就是定义和使用一条龙的意思，比如test()
+	num1 := 10
+	num2 := 0
+	res := num1/num2
+	fmt.Println("res is :", res)   //此语句没有执行，因为上一句出现错误时就已经终止然后开始执行defer语句了！
+}
+
+func main(){
+	test()
+	fmt.Println("the code after recover.")       
+	//这样即使test函数有错误被err捕获只影响test函数内部终止，main函数不受影响可以继续执行
+	test2()
+	fmt.Println("the code after panic.")  //由于是panic型错误，程序终止，此语句不执行
+}
