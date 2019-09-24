@@ -23,4 +23,13 @@ func main(){
 	fmt.Printf("slice2 %v, lens %v, cap is %v\n", slice2, len(slice2), cap(slice2))
 	fmt.Printf("slice3 %v, lens %v, cap is %v\n", slice3, len(slice3), cap(slice3))
 	fmt.Printf("slice4 %v, lens %v, cap is %v\n", slice4, len(slice4), cap(slice4))
+
+	var slice5 []int = []int{10, 20, 43, 56, 66}
+	slice6 := append(slice5, slice2...) //append会生成一个新数组，而不是直接在slice5后面添加.如果添加的也是切片，需要加...
+	fmt.Printf("slice5 is %v, slice6 is %v\n", slice5, slice6)
+	var slice7 []int = make([]int, 10)
+	var slice8 []int = make([]int, 2, 4)
+	copy(slice7, slice5) //copy直接在第一个参数执行,它不需要加...
+	copy(slice8, slice5) //如果切片复制超出范围，也不会报错，只是将能放入的放入,这和cap无关
+	fmt.Printf("slice7 is %v, slice8 is %v\n", slice7, slice8)
 }	
