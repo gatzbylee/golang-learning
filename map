@@ -1,0 +1,51 @@
+package main
+import(
+	"fmt"
+)
+
+func main(){
+	var map1 map[string]string
+	map1 = make(map[string]string, 3)
+	map1["no1"] = "tom"
+	map1["no2"] = "jack"
+	fmt.Println("map1:", map1)
+
+	map2 := map[string]string{"no3":"rose", "no4":"mary"}   //声明map的其中几种方式
+	fmt.Println("map2:", map2)
+
+	var stuinfo = make(map[string]map[string]string, 10) //map[string] 是key，后面的map[string]string是值
+	stuinfo["xiaoming"] = make(map[string]string, 3)
+	stuinfo["xiaoming"]["address"] = "six avenue"
+	stuinfo["xiaoming"]["hobby"] = "videogame"
+	stuinfo["xiaoming"]["hate"] = "poor"
+	stuinfo["xiaohong"] = make(map[string]string, 3)   //map里面放map，注意，每个一级索引赋值时依然要make一下
+	stuinfo["xiaohong"]["address"] = "one avenue"
+	stuinfo["xiaohong"]["hobby"] = "movie"
+	stuinfo["xiaohong"]["hate"] = "busy"
+	//stuinfo["xiaohong"] = make(map[string]string, 3) 如果再来这个语句，就会重新分配一个空间，之前的都会不再存在
+	fmt.Println("xiaoming info:", stuinfo["xiaoming"])  
+	fmt.Println("xiaohong info:", stuinfo["xiaohong"])
+
+	delete(stuinfo["xiaohong"], "hobby")   //删除操作
+	fmt.Println("xiaohong info:", stuinfo["xiaohong"])
+	val, ok := stuinfo["xiaoming"]["hate"]  //查找操作,stuinfo["xiaoming"]["hate"]会返回两个值，第一个为值，第二个为true
+	if ok{
+		fmt.Println("find it, val is ", val)
+		fmt.Println(ok)
+	} else{
+		fmt.Println("dont find")
+	}
+
+	var map3 []map[string]string   //首先它是个切片，然后是map
+	map3 = make([]map[string]string, 2)
+	map3[0] = make(map[string]string, 2)  //切片和里面map都需要make一下
+	map3[0]["major"] = "math"
+	map3[0]["grade"] = "90"
+	map3[1] = make(map[string]string, 2)
+	map3[1]["major"] = "english"
+	map3[1]["grade"] = "65"
+	fmt.Println("jj is ", map3[0], "kk is ", map3[1]) 
+	var map4 = map[string]string{"major":"art", "grade":"78"}  //不应是切片
+	map3 = append(map3, map4)
+	fmt.Println("map3 is ", map3)
+}
