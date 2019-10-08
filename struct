@@ -1,0 +1,32 @@
+package main 
+import(
+	"fmt"
+)
+
+type Person struct{
+	Name string
+	Age int
+}
+
+type Cat struct{
+	Name string
+	Age int
+	Grade []int
+}
+
+func main(){
+	var p1 Person = Person{"jack", 18}
+	p2 := Person{"mary", 30}
+	//p2.Name = "mary"
+	//p2.Age = 30
+	var p3 *Person = new(Person)       //由于是指针，所以要new一下，new头字母是小写！
+	//var p3 *Person = &Person{"smith", 25} 是另一种写法
+	(*p3).Name = "smith"  //等价于p3.Name = "smith"
+	(*p3).Age = 25        //等价于p3.Age =25
+	p4 := Cat{}
+	p4.Name = "mimi"
+	p4.Age = 20
+	p4.Grade = make([]int, 10)  //结构体中含有切片，map等需要make的类型也依然需要make一下再使用
+	p4.Grade[0]= 44
+	fmt.Printf("p1 is:%v, p2 is:%v, p3 is:%v, p4 is:%v\n", p1, p2, p3, p4)
+}
