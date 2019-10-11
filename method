@@ -1,0 +1,38 @@
+package main
+import(
+	"fmt"
+)
+
+type Person struct{
+	Name string
+	Math int
+	English int
+}
+
+type Integer int 
+
+func (i Integer) tell(){
+	fmt.Printf("This is an integer.\n")
+}
+
+func (p Person) total() int{      //给结构体也就是对象写方法的格式，为值传递，也就是方法内部并不改变本来的值
+	p.Name = "值传递"             //此不在外部改变对象的名字
+	return p.Math + p.English
+}
+
+func (p *Person) sub() int{    //如同函数一般，用指针可以从函数内部改变外部对象的内容
+	p.Name = "引用传递"         //如此就会改变，其标准形式为(*p).Name = "引用传递"
+	return p.Math - p.English   //标准格式为(*p).Math - (*p).English
+}
+
+func main(){
+	p := Person{"tom", 98, 65}  //如果不是一下子把全部字段赋值，则不宜用此赋值方法
+	fmt.Printf("p total is %v, res is %v\n", p.total(), p)
+	(&p).total()  //虽然写成(&p)但仍然是值传递的，这要要以方法定义来决定，也就是func (p Person) total() int
+	//这是对象方法和函数的区别之一
+	fmt.Printf("p total is %v, res is %v\n", p.total(), p)
+	fmt.Printf("p sub is %v, res is %v\n", p.sub(), p)  //标准格式为(&p).sub()
+
+	var i Integer  
+	i.tell()    //自定义类型可以看做简单版结构体，也可以使用方法
+}
