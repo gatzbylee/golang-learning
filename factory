@@ -1,0 +1,34 @@
+/*main包*/
+package main
+import(
+	"fmt"
+	"go_code/project01/factory/model"
+)
+
+func main(){
+	per := model.Getperson("jack", 23)
+	fmt.Println("per is", *per)
+	fmt.Println("per age is", per.Getage())
+}
+
+
+/*model包*/
+package model
+
+
+type person struct{   //小写p，是外部不可用的
+	name string
+	age int
+}
+
+func Getperson(n string, a int) *person{  //通过外部可用的函数来返回一个只在内部可用的对象来让外部可以用person类
+	var per person
+	per.name = n
+	per.age = a
+	return &per
+}
+
+func (p *person) Getage() int{  
+	//一样的道理，只是外部使用person创建对象后，如果其内部字段为小写仍不可用，需要用到此函数来使用
+	return p.age
+}
