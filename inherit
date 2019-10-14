@@ -1,0 +1,40 @@
+package main
+import(
+	"fmt"
+)
+
+type A struct{
+	Name string
+	age int             //私有字段。如果C继承了A。则这个私有字段也为C所公用
+}
+
+func (a A) Atell(){
+	fmt.Println("a tell to", a.Name)
+}
+
+type B struct{
+	Name string
+	math int
+}
+
+func (b B) Btell(){
+	fmt.Println("b tell to", b.Name)
+}
+
+type C struct{
+	A
+	beta B              //声明了的下面必须用c.beta.的形式使用，不能简化使用
+	Name string
+}
+
+func main(){
+	var c C
+	c.Name = "jacob"
+	c.age = 18
+	c.Atell()                //后面为空，因为c.Name赋值的默认为C类里的Name，而A内的Name并没有赋值
+	c.beta.Btell()             //同上 
+	c.beta.Name = "jack"
+	c.beta.Btell()
+	c.A.Name = "mary"
+	c.Atell()              //标准形式给A的Name赋值后Atell就有了输出a tell to mary
+}
