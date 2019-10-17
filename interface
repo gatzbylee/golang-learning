@@ -1,0 +1,40 @@
+package main
+import(
+	"fmt"
+)
+
+type Usb interface{    //接口不能有字段，只能有方法，和结构体对应
+	start()
+	stop()
+}
+
+type Usb2 interface{Usb} //接口亦可以继承
+
+type Interger int //自定义类型也可以使用接口，方法就不写了
+type Phone struct{}  //只有都完成了接口方法的结构体对象才能赋值于接口，var u Usb = p
+ func (p *Phone) start(){fmt.Println("phone start.")}  //这是个指针
+ 
+ func (p Phone) stop(){fmt.Println("phone stop.")}
+
+type Camera struct{}
+ func (c Camera) start(){fmt.Println("camera start.")}
+
+ func (c Camera) stop(){fmt.Println("camera stop.")}
+
+ type Computer struct{}
+ func (t Computer) use(u Usb) {
+	 u.start()
+	 u.stop()
+ }
+
+ func main(){
+	 var t Computer
+	 var p Phone
+	 var c Camera
+	 t.use(&p)  //其实这里&p既可以用(p *Phone) 也可以(p Phone)
+	 //如果是指针的话，直接用var u Usb = p就不可以了，但可以var u Usb = &p
+	 t.use(c)
+
+	 var u Usb2 = c
+	 fmt.Println("usb2 u is", u)  //同样，一个自定义类型可以实现过个接口
+ }
