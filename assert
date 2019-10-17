@@ -1,0 +1,43 @@
+package main
+import (
+	"fmt"
+)
+
+type A interface{}  //空接口可以接受任何变量
+
+type Cat struct{}
+func (c Cat) bark(){fmt.Println("cat bark")}
+
+func TypeAssert(items... interface{}){  
+	//由于空接口可以接受任何变量,所以items可以是任何类型（如果使用数组切片类型就被固定住了）
+	for i, v := range items {
+		switch v.(type){  //(type)是switch语句里的独特用法，判断v的类型的也就是
+		case bool:
+			fmt.Printf("No:%v type is bool, value is %v\n", i, v)
+		case string:
+			fmt.Printf("No:%v type is string, value is %v\n", i, v)
+		default:
+			fmt.Printf("Not all of this\n")
+		}
+	
+	}
+}
+
+func main(){
+	var a A
+	var c Cat
+	a = c
+	c1, ok := a.(Cat)  
+	//当接口赋给类型时不能直接c1 = a,需要断言一下a.(Cat)，可以后面加个ok和if语句判断，以防不对时后面的语句依然可以执行
+	if ok{
+		fmt.Println("c1 is ",c1)
+	} else{
+		fmt.Println("error")
+	}
+	fmt.Println("continue")
+
+	var n1 string = "jack"
+	var n2 bool = true
+	var n3 string = "rose"
+	TypeAssert(n1, n2, n3)
+}
