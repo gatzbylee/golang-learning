@@ -1,0 +1,32 @@
+package main
+import(
+	"fmt"
+	"os"
+	"bufio"
+	"io"
+	"io/ioutil"
+)
+
+func main(){
+	file, err := os.Open("156.txt")  //打开文档的基本操作
+	if err != nil {    //err不是bool类型，不能用!err，它对应的事nil
+		fmt.Println(err)
+	}
+	defer file.Close()
+	reader := bufio.NewReader(file)  //bufio用的是缓存读，一般一次用4096个字节放入内存，记住NewReader这个函数
+	for{
+		str, err := reader.ReadString('\n')  //碰到回车结束
+		if err == io.EOF{ //EOF代表文件结尾，就是说文件读完了
+			break
+		}
+		fmt.Print(str)
+	}
+	fmt.Println("All done.")
+
+	content, err2 := ioutil.ReadFile("156.txt")  
+	//为一次性读完文件的方法，适合小文件，它自带Close，所以不用最后再把文件关了的操作
+	if err2 != nil{
+		fmt.Println(err2)
+	}
+	fmt.Printf("%v", string(content))  //输出的是[]byte类型，所以要string化一下才是正常文本，否则是一串数字
+}
