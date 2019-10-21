@@ -1,0 +1,80 @@
+package main
+import(
+	"bufio"
+	"os"
+	"fmt"
+	"io/ioutil"
+	"io"
+)
+
+func FileExist (path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil{       //没有错误，就是找到了
+		return true, nil
+	}
+	if os.IsNotExist(err){  //判断错误类型是否是IsNotExist，是的话就说明没找到
+		return false, nil
+	}
+	return false, err
+}
+
+func CopyFile(dstfilename string, srcfilename string) (written int64, err error){
+	srcfile, err := os.Open(srcfilename)
+	if err != nil{
+		fmt.Println(err)
+	}
+	defer srcfile.Close()
+	reader := bufio.NewReader(srcfile) //创建一个NewReader对象，就是要拷贝的文件
+
+	dstfile, err := os.OpenFile(dstfilename, os.O_CREATE | os.O_WRONLY, 0666)
+	if err != nil{
+		fmt.Println(err)
+		return 
+	}
+	defer dstfile.Close()
+	writer := bufio.NewWriter(dstfile) //创建一个拷贝到哪里的地方
+	defer writer.Flush()  //记住要flush，否则文本文件会无效
+	return io.Copy(writer, reader)  //拷贝函数，writer和reader是Writer和Reader类型
+}
+
+func main(){
+	filepath := "E:\\mygocode\\src\\go_code\\project01\\mainabc.txt"
+	file, err := os.OpenFile(filepath, os.O_WRONLY | os.O_CREATE, 0666) 
+	//os.OpenFile用法，第二个为处理方式os.O_WRONLY | os.O_CREATE意为创建和写，0666是权限设置，参见linux
+	if err != nil{
+		fmt.Println(err)
+		return 
+	}
+	defer file.Close()  //os.OpenFile的方法是要有关闭文件语句的
+	str := "the fox jump over the river\r\n"  //r和n是为了应对有些软件可识别的问题
+	writer := bufio.NewWriter(file) //创建个写对象
+	for i:=0; i<=10;i++{
+		writer.WriteString(str)  //writer对象有WriteString方法
+	} 
+	writer.Flush()  //上面的写只是放在缓存中的，要用此方法真正写入文件里，否则创建的文件没有内容
+
+	filepath1 := "E:\\mygocode\\src\\go_code\\project01\\main\\156.txt"
+	filepath2 := "E:\\mygocode\\src\\go_code\\project01\\main\\234.txt"
+	content, err := ioutil.ReadFile(filepath1)
+	if err != nil{
+		fmt.Println(err)
+		return
+	}
+	err = ioutil.WriteFile(filepath2, content, 0666)
+	if err != nil{
+		fmt.Println(err)
+		return
+	}
+
+	_, err1 :=CopyFile("E:\\mygocode\\src\\go_code\\project01\\main\\test1.txt","E:\\mygocode\\src\\go_code\\project01\\main\\156.txt")
+	if err1 == nil{
+		fmt.Println("success")
+	}else {
+		fmt.Println("err1")
+	}
+}
+
+//os.O_TRUNC 清空打开的文件
+//os.O_APPEND 追加模式
+//os.O_RDWR 读写模式
+//
