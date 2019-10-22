@@ -1,0 +1,44 @@
+package main
+import(
+	"fmt"
+	"encoding/json"
+)
+
+func Slice2Json(slice []map[string]interface{}) ([]byte, error){  
+	//json.Msrshal返回的是[]byte类型，其他地方要string化一下
+	return json.Marshal(slice)
+}
+
+func Json2Slice(data string) []map[string]interface{}{ 
+	//map[string]interface{} 意为key是string,value是interface，也就是任意类型
+	var slice []map[string]interface{}
+	err := json.Unmarshal([]byte(data), &slice) 
+	//直接在slice本部改然后再返回它，[]byte(data)因为data是string类型所以要改一下，下面的string(json)有些多此一举
+	if err != nil{
+		fmt.Println(err)
+	}
+	return slice
+}
+
+func main(){
+	var a []map[string]interface{}    //记住这种方式拓展空间
+	var m1 map[string]interface{}
+	m1 = make(map[string]interface{})
+	m1["name"] = "jack"
+	m1["age"] = 18
+	a = append(a, m1)
+	var m2 map[string]interface{}
+	m2 = make(map[string]interface{})
+	m2["name"] = "rose"
+	m2["age"] = 15
+	a = append(a, m2)
+
+	json, err := Slice2Json(a)
+	if err != nil{
+		fmt.Println(err)
+	}
+	fmt.Println(string(json))
+
+	slice := Json2Slice(string(json))  //里面的json.Unmarshal不需要再make空间了，里面自带了
+	fmt.Println(slice)
+}
