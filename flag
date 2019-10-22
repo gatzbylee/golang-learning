@@ -1,0 +1,22 @@
+package main
+import(
+	"fmt"
+	"flag"
+)
+
+func main(){
+	var user string
+	var pwd string
+	var host string
+	var port int
+
+	flag.StringVar(&user, "u", "", "用户信息")
+	flag.StringVar(&pwd, "pwd", "", "用户密码")
+	flag.StringVar(&host, "h", "localhost", "主机地址")
+	flag.IntVar(&port, "p", 3306, "端口位置")
+//获取命令行的参数信息，第一个为接受变量，第二个为命令行标识，第三个为默认值，第四个为说明
+	flag.Parse() //flag在确认后需要解析一下
+
+	fmt.Printf("user is %v, password is %v, host is %v, port is %v",
+				user, pwd, host, port)
+}
