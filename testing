@@ -1,0 +1,16 @@
+package main
+import(
+	"testing"
+
+)
+
+func TestSum(t *testing.T){  //测试函数格式是固定的TestXxxx这种
+	res := Sum(1,2,4,5,6)
+	if res != 18{
+		t.Fatalf("sum is wrong,expect 18, actually %v", res)
+	}
+	t.Logf("this is right")
+}
+//不需要main函数，因为testing框架里面已经包含了
+//go test -v args_test args.go 可以指定测试文件，如果只有go test -v 则会测试文件夹下的所有测试文件
+//测试文件的名字格式也是固定的,即xxxx_test.go这种
