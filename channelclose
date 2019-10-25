@@ -1,0 +1,38 @@
+package main
+import(
+	"fmt"
+)
+
+func WriteChan(IntChan chan int){
+	for i:=1; i<=100; i++{
+		IntChan<- i
+		fmt.Println("WRITE ", i)
+	}
+	close(IntChan)  //close后写入不行了，但可以继续读,如果没这步会出现死锁deadlock
+}
+
+func ReadChan(IntChan chan int, ExitChan chan bool){
+	for{
+		v, ok := <-IntChan   //读出返回两个，第二个是说明读出是否成功的bool值
+		if !ok{
+			break      
+			//由于编译器的作用，即使在过程中IntChan为空，但编译器发现还有写入的携程，就不会执行这步，也不会出现死锁的问题
+		}
+		fmt.Println("READ ", v)
+	}
+	ExitChan<- true
+	close(ExitChan)  //如果不close的话会出现死锁
+}
+
+func main(){
+	var IntChan chan int = make(chan int, 50)
+	var ExitChan chan bool = make(chan bool, 1)
+	go WriteChan(IntChan)
+	go ReadChan(IntChan, ExitChan)
+	for{
+		_, ok := <-ExitChan
+		if !ok{
+			break  //同上，编译器是智能的，由于发现有写入的携程，所以即使执行过程中发现为空也不会执行这步
+		}
+	}
+}
