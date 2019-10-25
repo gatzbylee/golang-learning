@@ -1,0 +1,23 @@
+package main
+import(
+	"fmt"
+)
+
+type Cat struct{
+	Name string
+	Age int
+}
+
+func main(){
+	var ch chan interface{}
+	ch = make(chan interface{}, 3)
+	ch<- 10  //将管道塞入第一个对象
+	ch<- "tomjake"  //第二个
+	ch<- Cat{Name:"mimi", Age:10}  //第三个
+
+	<-ch   //管道拿出第一个扔掉，不发给任何变量
+	<-ch   //拿出第二个
+	a := (<-ch).(Cat)   //可以先cat := <-ch,然后再 a:= cat.(Cat)
+	//这种叫接口断言，因为接口没有字段，所以输出.Name时要把接口类型<-ch转换成Cat
+	fmt.Printf("Cat name is %v", a.Name)
+}
