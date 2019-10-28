@@ -36,3 +36,9 @@ func main(){
 		}
 	}
 }
+
+
+//close(chan)   //如果不先close管道，则下面遍历到最后会出现deadlock错误
+//for v := range chan{  //管道遍历不能用for i:= 1;...这样的，因为len是变化的，
+//...
+//}
