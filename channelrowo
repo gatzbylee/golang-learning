@@ -1,0 +1,44 @@
+package main
+import(
+	"fmt"
+)
+
+func Send(ch chan<- int, exit chan struct{}){
+	for i := 1; i < 10 ; i++{
+		ch<- i
+	}
+	close(ch)
+	var a struct{}
+	exit<- a
+}
+
+func Recv(ch <-chan int, exit chan struct{}){  //管道是可以只读或只写的，比如var ch chan<- int ,var ch <-chan int
+	for{
+		v, ok := <-ch
+		if !ok{
+			break
+		}
+		fmt.Println(v)
+	}
+	var a struct{}
+	exit<- a
+}
+
+func main(){
+	var ch chan int
+	var exit chan struct{}
+	ch = make(chan int, 10)  //但在make空间时不要带上，因为只读只写是属性，而不是chan本身的性质
+	exit = make(chan struct{}, 2)
+	go Send(ch, exit)
+	go Recv(ch, exit)
+	var total int
+	for {
+		_ = <-exit
+		total++
+		if total == 2{
+			break
+		}
+	}
+	
+	fmt.Println("fine")
+}
