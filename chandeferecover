@@ -1,0 +1,43 @@
+package main
+import(
+	"fmt"
+)
+
+func fun1(exit chan bool){
+	for i := 0; i < 10; i++{
+		fmt.Println("this ", i)
+	}
+	exit<- true
+	fmt.Println("fun1 done")
+}
+
+func fun2(exit chan bool){
+	exit<- true
+	defer func(){   //defer 加 recover用来捕获panic，这样就不用一个错误整个程序退出了
+		//这是个匿名函数的用法，最后要加(),这个括号相当于调用了此匿名函数（就是里面放参数调用）
+		if err := recover(); err != nil{
+			fmt.Println("have error, is ", err)
+		}
+	}()
+	var m map[int]string
+	m[0] = "jack"  //此处错误
+	fmt.Println("fun2 done")
+}
+
+func main(){
+	var exit chan bool
+	exit = make(chan bool, 2)
+	go fun1(exit)
+	go fun2(exit)
+
+	var total int
+	for{
+		if total == 2{
+			close(exit)
+			break
+		}
+		<-exit
+		total++
+	}
+	fmt.Println("fine")
+}
