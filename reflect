@@ -34,4 +34,10 @@ func main(){
 	var n2 int = 10
 	refchange(&n2)
 	fmt.Println(n2)
+
+	//var str int = 10
+	//fs := reflect.ValueOf(str)  
+	//fs.SetInt(5)            
+	//因为reflect.ValueOf(x)返回的reflect.Value都是不可取地址的，也就无法赋值，它相当于只是个副本,所以这会报错
+	//fmt.Println(str, a)
 }
