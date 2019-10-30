@@ -1,0 +1,37 @@
+package main
+import(
+	"fmt"
+	"reflect"
+)
+
+func reftrans(n interface{}){
+	tval := reflect.TypeOf(n)  //转为reflcet.rtype类型，默认输出类型，也就是int
+	fmt.Printf("tval is %v, type %T\n", tval, tval)
+
+	vval := reflect.ValueOf(n)  
+	//转为reflect.Value类型，默认输出其值，但是不能用来直接计算，比如 2 + vval，因为反射他是运行时反射，虽然可以显示数值，但本身并不是int
+	fmt.Printf("vval is %v, type %T\n", vval, vval)
+	fmt.Printf("vval.Int() is %v, type %T\n", vval.Int(), vval.Int()) //通过Int函数转化就可以2 +vval.Int()的操作
+	//n2 := vval.Float() 这种是不行的，因为n传入时是int，反射机制并不能改变数据类型
+	//想要做n类型的判断可以使用switch加上n.(type)这种方式来判断类型
+	ival := vval.Interface()
+	n1 := ival.(int) //对付接口用强制转换
+	fmt.Printf("ival is %v, n1 is %v \n", ival, n1)
+
+	kind1 := tval.Kind() // 可以看出类别，因为n传入时是int，所以1和2都输出int，kind显示最基本数据类型
+	kind2 := vval.Kind()
+	fmt.Printf("kind1 is %v ,type %T, kind2 is %v, type %T\n",kind1, kind1, kind2, kind2)
+}
+
+func refchange(n interface{}){  
+	vval := reflect.ValueOf(n)  //由于下面的n2传入的是地址，所以，vval是指针，而指针不支持reflect.Value的方法
+	vval.Elem().SetInt(100) //解决方法是用vval.Elem()，相当于取地址的值，就是*ptr
+}
+
+func main(){
+	var n int = 10
+	reftrans(n)
+	var n2 int = 10
+	refchange(&n2)
+	fmt.Println(n2)
+}
