@@ -1,0 +1,79 @@
+#server.go
+package main
+ import(
+	 "fmt"
+	 "net"
+ )
+
+ func Process(conn net.Conn){  //被用来创建协程接受来自client的信息，一个client对应一个协程
+	defer conn.Close()
+	for{
+		buf := make([]byte, 1024)
+		//fmt.Println("server is waiting client ", conn.RemoteAddr().String())
+		n, err := conn.Read(buf)    //读取conn发来的信息，一开始是[]byte类型，而且需要先定义个空间来接受，n返回字节数
+		if err != nil{
+			fmt.Println("server read err, = ", err)
+			return
+		}
+		fmt.Print(string(buf[:n]))  //n的作用就是当从conn接受来的数据不够1024空间时，不至于是很长一段空串的输出
+	}
+ }
+
+ func main(){
+	 fmt.Println("Listening  start.")
+	 listen, err := net.Listen("tcp","0.0.0.0:8888")        //创建个listen对象，用来接受client的连接请求
+	 if err != nil{
+		 fmt.Println("listening wrong ,err=", err)
+		 return
+	 }
+	 fmt.Println("Listening success,suc = ",listen)
+	 defer listen.Close()
+
+	 for{
+		 fmt.Println("Waiting for client")
+		 conn, err := listen.Accept()   //当listen通过时，可以用conn来接受client发来数据
+		 if err != nil{
+			 fmt.Println("conn err , = ", err)
+		 }
+		 fmt.Printf("conn success , =%v , ip is %v", conn, conn.RemoteAddr().String())
+
+		 go Process(conn) //接收协程，go可以创建很多协程来应对很多client
+	 }
+ }
+ 
+ #client.go
+ package main
+import(
+	"fmt"
+	"net"
+	"bufio"
+	"os"
+	"strings"
+)
+
+func main(){
+	conn, err := net.Dial("tcp","192.168.1.35:8888")  //拨打server的地址。成功了就会把以conn作为通讯载体
+	if err != nil{
+		fmt.Println("conn err , = ", err)
+		return 
+	}
+	fmt.Println("conn success, = ", conn)
+
+	for{
+		reader := bufio.NewReader(os.Stdin)  //从终端接受输入的信息
+		line, err := reader.ReadString('\n') //以换行为终点接受一次信息
+		if err != nil{
+			fmt.Println("read err, = ", err)
+		}
+
+		line = strings.Trim(line," \r\n")  //去除最后的空格\r\n，以方便下面的exit判断
+		if line == "exit"{                 //退出条件
+			fmt.Println("client exit")  
+			break
+		}
+		_, err = conn.Write([]byte(line + "\n"))  //通讯中conn接收的是[]byte数据，以及为了后面能一行一个语句，加了个\n
+		if err != nil{
+			fmt.Println("conn.Write err, = ", err)
+		}
+	}
+}
